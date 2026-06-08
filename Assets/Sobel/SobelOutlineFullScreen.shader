@@ -7,6 +7,9 @@ Shader "Hidden/GANDT/SobelOutlineFullScreen"
         _Thickness ("Thickness", Range(0.5, 5)) = 1.0
         _EdgeIntensity ("Edge Intensity", Range(0, 5)) = 1.0
         _Blend ("Blend", Range(0, 1)) = 1.0
+
+        // Edge Only 디버그 모드
+        _DebugEdgeOnly ("Debug Edge Only", Range(0, 1)) = 0
     }
 
     SubShader
@@ -38,6 +41,9 @@ Shader "Hidden/GANDT/SobelOutlineFullScreen"
             float _Thickness;
             float _EdgeIntensity;
             float _Blend;
+
+            // 디버그 변수
+            float _DebugEdgeOnly;
 
             float GANDT_Luminance(float3 color)
             {
@@ -92,7 +98,15 @@ Shader "Hidden/GANDT/SobelOutlineFullScreen"
                 edge = smoothstep(_Threshold, _Threshold + 0.05, edge);
 
                 float3 outlinedColor = lerp(originalColor, _OutlineColor.rgb, edge * _OutlineColor.a);
-                float3 finalColor = lerp(originalColor, outlinedColor, _Blend);
+                // float3 finalColor = lerp(originalColor, outlinedColor, _Blend);
+                float3 normalModeColor = lerp(originalColor, outlinedColor, _Blend);
+
+                // Edge Only 디버그 모드에서는 윤곽선 색상만 출력
+                float3 edgeOnlyColor = edge.xxx;
+
+                // _DebugEdgeOnly = 0이면 일반 외곽선 모드
+                // _DebugEdgeOnly = 1이면 Edge Only 디버그 모드  
+                float3 finalColor = lerp(normalModeColor, edgeOnlyColor, _DebugEdgeOnly);
 
                 // half4 color = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv) * _BaseColor;
                 return half4(finalColor, 1.0);
