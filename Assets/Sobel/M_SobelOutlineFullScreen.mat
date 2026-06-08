@@ -85,36 +85,45 @@ Material:
     - _AddPrecomputedVelocity: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
-    - _Blend: 0.904
+    - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
+    - _ColorSensitivity: 1
     - _Cull: 2
     - _Cutoff: 0.5
-    - _DebugEdgeOnly: 1
+    - _DebugEdgeOnly: 0
+    - _DepthSensitivity: 5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
+    - _DitherStrength: 0.04
     - _DstBlend: 0
     - _DstBlendAlpha: 0
-    - _EdgeIntensity: 1.33
+    - _EdgeIntensity: 1.94
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _Metallic: 0
+    - _NoiseStrength: 0.03
+    - _NormalSensitivity: 4
     - _OcclusionStrength: 1
     - _Parallax: 0.005
+    - _PixelResolution: 240
+    - _PosterizeLevels: 4
     - _QueueOffset: 0
     - _ReceiveShadows: 1
+    - _ShakeSpeed: 12
+    - _ShakeStrength: 0
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
-    - _Thickness: 1.21
-    - _Threshold: 0.359
+    - _Thickness: 1.41
+    - _Threshold: 0.086
     - _WorkflowMode: 1
     - _XRMotionVectorsPass: 1
     - _ZWrite: 1
