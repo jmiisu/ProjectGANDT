@@ -1,4 +1,4 @@
-Shader "Hidden/GANDT/SobelOutlineFullScreen"
+Shader "Hidden/GANDT/ForAssignment"
 {
     Properties
     {
@@ -34,7 +34,7 @@ Shader "Hidden/GANDT/SobelOutlineFullScreen"
 
         Pass
         {
-            Name "SobelOutlineFullScreen"
+            Name "ForAssignment"
 
             HLSLPROGRAM
 

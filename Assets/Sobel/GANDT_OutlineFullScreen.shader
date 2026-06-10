@@ -1,4 +1,4 @@
-Shader "Hidden/GANDT/SobelOutlineFullScreen"
+Shader "Hidden/GANDT/GANDT_Customized"
 {
     Properties
     {
@@ -13,6 +13,11 @@ Shader "Hidden/GANDT/SobelOutlineFullScreen"
         _Blend ("Blend", Range(0, 1)) = 1.0
 
         _PixelResolution ("Pixel Resolution", Range(64, 720)) = 240
+        _PosterizeLevels ("Posterize Levels", Range(2, 16)) = 4
+        _DitherStrength ("Dither Strength", Range(0, 0.2)) = 0.04
+        _NoiseStrength ("Noise Strength", Range(0, 0.2)) = 0.03
+        _ShakeStrength ("Shake Strength", Range(0, 0.2)) = 0.02
+        _ShakeSpeed ("Shake Speed", Range(0, 50)) = 12
 
         // Depth, Normal, Color
         _DepthSensitivity ("Depth Sensitivity", Range(0, 20)) = 5
@@ -34,7 +39,7 @@ Shader "Hidden/GANDT/SobelOutlineFullScreen"
 
         Pass
         {
-            Name "SobelOutlineFullScreen"
+            Name "GANDT_Customized"
 
             HLSLPROGRAM
 
@@ -59,6 +64,11 @@ Shader "Hidden/GANDT/SobelOutlineFullScreen"
             float _DebugEdgeOnly;
 
             float _PixelResolution;
+            float _PosterizeLevels;
+            float _DitherStrength;
+            float _NoiseStrength;
+            float _ShakeStrength;
+            float _ShakeSpeed;
 
             float _DepthSensitivity;
             float _NormalSensitivity;
@@ -91,6 +101,47 @@ Shader "Hidden/GANDT/SobelOutlineFullScreen"
                 float2 pixelCount = float2(_PixelResolution * aspect, _PixelResolution);
 
                 return (floor(uv * pixelCount) + 0.5) / pixelCount;
+            }
+
+            // 화면 흔들림 함수
+            float2 GetShakeOffset()
+            {
+                float t = _Time.y * _ShakeSpeed;
+
+                float x = sin(t * 1.7) * 0.6 + sin(t * 3.1) * 0.4;
+                float y = cos(t * 2.3) * 0.6 + sin(t * 4.7) * 0.4;
+
+                return float2(x, y) * _ShakeStrength;
+            }
+
+            // Posterize 함수
+            // 색을 단계적으로 끊어주는 함수
+            float3 PosterizeColor(float3 color)
+            {
+                return floor(color * _PosterizeLevels) / max(_PosterizeLevels - 1.0, 1.0);
+            }
+
+            // Noise / Dither 함수
+            // Hash Noise 방식
+            float Hash12(float2 p)
+            {
+                float3 p3 = frac(float3(p.xyx) * 0.1031);
+                p3 += dot(p3, p3.yzx + 33.33);
+                
+                return frac((p3.x + p3.y) * p3.z);
+            }
+
+            float3 ApplyNoiseDither(float3 color, float2 uv)
+            {
+                float2 pixelPos = uv * _ScreenParams.xy;
+
+                float noise = Hash12(floor(pixelPos));
+                noise -= 0.5;
+
+                color += noise * _NoiseStrength;
+                color += noise * _DitherStrength;
+
+                return saturate(color);
             }
 
             // Depth + Normal Sobel 샘플링 함수
@@ -196,6 +247,9 @@ Shader "Hidden/GANDT/SobelOutlineFullScreen"
 
                 float2 uv = input.texcoord;
 
+                // 1. 화면 흔들림
+                uv += GetShakeOffset();
+
                 // 2. Pixelation
                 float2 pixelUV = PixelateUV(uv);
 
@@ -206,31 +260,52 @@ Shader "Hidden/GANDT/SobelOutlineFullScreen"
                     // uv
                     pixelUV
                 ).rgb;
+                
+
+                // 4. Posterize
+                float3 posterizedColor = PosterizeColor(originalColor);
+
+                // 5. Noise / Dither
+                posterizedColor = ApplyNoiseDither(posterizedColor, pixelUV);
+
+
+                // 소벨 필터 연산 부분
+                /*
+                // Sample the luminance of the surrounding pixels
+                float tl = SampleLuminance(uv, float2(-1,  1));
+                float  t = SampleLuminance(uv, float2( 0,  1));
+                float tr = SampleLuminance(uv, float2( 1,  1));
+
+                float  l = SampleLuminance(uv, float2(-1,  0));
+                float  r = SampleLuminance(uv, float2( 1,  0));
+
+                float bl = SampleLuminance(uv, float2(-1, -1));
+                float  b = SampleLuminance(uv, float2( 0, -1));
+                float br = SampleLuminance(uv, float2( 1, -1));
+
+                float gx = (-tl - 2.0 * l - bl) + ( tr + 2.0 * r + br);
+                float gy = ( tl + 2.0 * t + tr) + (-bl - 2.0 * b - br);
+                // float gy = ( tl + 2.0 * t - tr) + (-bl - 2.0 * b - br);
+
+                float edge = sqrt(gx * gx + gy * gy);
+                edge *= _EdgeIntensity;
+
+                edge = smoothstep(_Threshold, _Threshold + 0.05, edge);
+                
+                */
 
                 // 6. Depth + Normal + Color Sobel edge
                 float edge = ComputeSobelEdge(pixelUV);
 
 
+
                 // 7. Edge 합성
-                /*
-                
                 // float3 outlinedColor = lerp(originalColor, _OutlineColor.rgb, edge * _OutlineColor.a);
                 float3 outlinedColor = lerp(posterizedColor, _OutlineColor.rgb, edge * _OutlineColor.a);
                 // float3 finalColor = lerp(originalColor, outlinedColor, _Blend);
                 // float3 normalModeColor = lerp(originalColor, outlinedColor, _Blend);
                 float3 normalModeColor = lerp(posterizedColor, outlinedColor, _Blend);
-                
-                */
 
-                // 7-1. 수정된 Edge 합성
-                
-                // float edgeMask = saturate(edge * _Blend * _OutlineColor.a);
-                // float3 finalBaseColor = posterizedColor;
-                // float3 outlinedColor = lerp(posterizedColor, _OutlineColor.rgb, edgeMask * 0.65);
-               
-                // 7-2. 260611 Edge 합성
-                float3 outlinedColor = lerp(originalColor, _OutlineColor.rgb, edge * _OutlineColor.a);
-                float3 normalModeColor = lerp(originalColor, outlinedColor, _Blend);
 
 
                 // 8. Edge Only 디버그 모드에서는 윤곽선 색상만 출력
@@ -238,12 +313,7 @@ Shader "Hidden/GANDT/SobelOutlineFullScreen"
 
                 // _DebugEdgeOnly = 0이면 일반 외곽선 모드
                 // _DebugEdgeOnly = 1이면 Edge Only 디버그 모드  
-
-                // 7번 방법
-                // float3 finalColor = lerp(normalModeColor, edgeOnlyColor, _DebugEdgeOnly); 
-                // 7-1번 방법
-                float3 finalColor = lerp(outlinedColor, edgeOnlyColor, _DebugEdgeOnly);
-
+                float3 finalColor = lerp(normalModeColor, edgeOnlyColor, _DebugEdgeOnly);
 
                 // half4 color = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv) * _BaseColor;
                 return half4(finalColor, 1.0);
