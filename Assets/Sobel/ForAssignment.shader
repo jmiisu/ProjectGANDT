@@ -3,21 +3,52 @@ Shader "Hidden/GANDT/ForAssignment"
     Properties
     {
         // Edge Only 디버그 모드
+        [Header(Debug Options)]
+        [Space(5)]
         _DebugEdgeOnly ("Debug Edge Only", Range(0, 1)) = 0
 
         // Sobel 스타일 필터 
+        [Header(Sobel Filter Settings)]
+        [Space(5)]
         _OutlineColor ("Outline Color", Color) = (0, 0, 0, 1)
         _Threshold ("Edge Threshold", Range(0, 1)) = 0.15
         _Thickness ("Thickness", Range(0.5, 5)) = 1.0
         _EdgeIntensity ("Edge Intensity", Range(0, 5)) = 1.0
         _Blend ("Blend", Range(0, 1)) = 1.0
 
+        // Pixelation 옵션
+        [Header(Pixelation Settings)]
+        [Space(5)]
         _PixelResolution ("Pixel Resolution", Range(64, 720)) = 240
 
         // Depth, Normal, Color
+        [Header(Buffer Sensitivity Settings)]
+        [Space(5)]
         _DepthSensitivity ("Depth Sensitivity", Range(0, 20)) = 5
         _NormalSensitivity ("Normal Sensitivity", Range(0, 20)) = 4
         _ColorSensitivity ("Color Sensitivity", Range(0, 10)) = 1
+
+        // Grayscale 옵션
+        // 흑백 기억 영상 효과를 위해 추가한 옵션
+        [Header(Grayscale Settings)]
+        [Space(5)]
+        _UseGrayScale ("Use Grayscale", Range(0, 1)) = 1
+        _GrayContrast ("Gray Contrast", Range(0.2, 3.0)) = 1.0
+
+        // 흑백 양자화
+        // 손상된 기억 영상 느낌을 위해 추가한 옵션
+        [Header(BW Quantize Settings)]
+        [Space(5)]
+        _UseBWQuantize ("Use BW Quantize", Range(0, 1)) = 0
+        _BWThreshold ("BW Threshold", Range(0, 1)) = 0.5
+
+        // Ordered Dithering 옵션
+        // 양자화된 이미지의 계조를 개선하기 위해 추가한 옵션
+        [Header(Ordered Dithering Settings)]
+        [Space(5)]
+        _UseDithering ("Use Dithering", Range(0, 1)) = 0
+        _DitherScale ("Dither Scale", Range(0.25, 8.0)) = 1.0
+        _DitherContrast ("Dither Contrast", Range(0.2, 3.0)) = 1.0
     }
 
     SubShader
@@ -64,6 +95,20 @@ Shader "Hidden/GANDT/ForAssignment"
             float _NormalSensitivity;
             float _ColorSensitivity;
 
+            // Grayscale 옵션
+            float _UseGrayScale;
+            float _GrayContrast;
+
+            // 흑백 양자화 옵션
+            float _UseBWQuantize;
+            float _BWThreshold;
+
+            // Ordered Dithering 옵션
+            float _UseDithering;
+            float _DitherScale;
+            float _DitherContrast;
+
+            // GANDT 전용 luminance 계산 함수
             float GANDT_Luminance(float3 color)
             {
                 return dot(color, float3(0.299, 0.587, 0.114));
@@ -190,6 +235,23 @@ Shader "Hidden/GANDT/ForAssignment"
                 return saturate(edge);
             }
 
+            // Ordered Dithering 함수
+            float Bayer4x4(float2 pixelPos)
+            {
+                int x = (int)fmod(pixelPos.x, 4);
+                int y = (int)fmod(pixelPos.y, 4);
+                int index = y + x * 4;
+
+                float bayer[16] = {
+                    0.0,  8.0,  2.0, 10.0,
+                    12.0, 4.0, 14.0,  6.0,
+                    3.0, 11.0,  1.0,  9.0,
+                    15.0, 7.0, 13.0,  5.0
+                };
+
+                return (bayer[index] + 0.5) / 16.0;
+            }
+
             half4 Frag(Varyings input) : SV_Target
             {
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
@@ -206,6 +268,30 @@ Shader "Hidden/GANDT/ForAssignment"
                     // uv
                     pixelUV
                 ).rgb;
+
+
+                // 4. Grayscale 옵션 적용
+                float luminance = GANDT_Luminance(originalColor);
+                luminance = pow(saturate(luminance), _GrayContrast); // 콘트라스트 조절
+
+                float3 grayscaleColor = luminance.xxx;
+                float3 baseColor = lerp(originalColor, grayscaleColor, _UseGrayScale);
+
+                // 5. 흑백 양자화 옵션 적용
+                float bw = step(_BWThreshold, luminance);
+                float3 bwColor = bw.xxx;
+
+                baseColor = lerp(baseColor, bwColor, _UseBWQuantize);
+
+                // 6. Ordered Dithering 적용
+                float2 pixelPos = floor(input.positionCS.xy / _DitherScale);
+                float threshold = Bayer4x4(pixelPos);
+
+                float ditherLum = pow(saturate(luminance), _DitherContrast);
+                float dither = step(threshold, ditherLum);
+                float3 ditherColor = dither.xxx;
+
+                baseColor = lerp(baseColor, ditherColor, _UseDithering);
 
                 // 6. Depth + Normal + Color Sobel edge
                 float edge = ComputeSobelEdge(pixelUV);
@@ -229,8 +315,8 @@ Shader "Hidden/GANDT/ForAssignment"
                 // float3 outlinedColor = lerp(posterizedColor, _OutlineColor.rgb, edgeMask * 0.65);
                
                 // 7-2. 260611 Edge 합성
-                float3 outlinedColor = lerp(originalColor, _OutlineColor.rgb, edge * _OutlineColor.a);
-                float3 normalModeColor = lerp(originalColor, outlinedColor, _Blend);
+                float3 outlinedColor = lerp(baseColor, _OutlineColor.rgb, edge * _OutlineColor.a);
+                float3 normalModeColor = lerp(baseColor, outlinedColor, _Blend);
 
 
                 // 8. Edge Only 디버그 모드에서는 윤곽선 색상만 출력
@@ -242,7 +328,7 @@ Shader "Hidden/GANDT/ForAssignment"
                 // 7번 방법
                 // float3 finalColor = lerp(normalModeColor, edgeOnlyColor, _DebugEdgeOnly); 
                 // 7-1번 방법
-                float3 finalColor = lerp(outlinedColor, edgeOnlyColor, _DebugEdgeOnly);
+                float3 finalColor = lerp(normalModeColor, edgeOnlyColor, _DebugEdgeOnly);
 
 
                 // half4 color = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv) * _BaseColor;

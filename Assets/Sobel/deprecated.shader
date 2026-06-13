@@ -1,4 +1,4 @@
-Shader "Hidden/GANDT/GANDT_Customized"
+Shader "Hidden/GANDT/_Deprecated"
 {
     Properties
     {
@@ -39,7 +39,7 @@ Shader "Hidden/GANDT/GANDT_Customized"
 
         Pass
         {
-            Name "GANDT_Customized"
+            Name "GANDT_Deprecated"
 
             HLSLPROGRAM
 

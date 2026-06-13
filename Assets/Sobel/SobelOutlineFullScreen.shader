@@ -209,24 +209,6 @@ Shader "Hidden/GANDT/SobelOutlineFullScreen"
 
                 // 6. Depth + Normal + Color Sobel edge
                 float edge = ComputeSobelEdge(pixelUV);
-
-
-                // 7. Edge 합성
-                /*
-                
-                // float3 outlinedColor = lerp(originalColor, _OutlineColor.rgb, edge * _OutlineColor.a);
-                float3 outlinedColor = lerp(posterizedColor, _OutlineColor.rgb, edge * _OutlineColor.a);
-                // float3 finalColor = lerp(originalColor, outlinedColor, _Blend);
-                // float3 normalModeColor = lerp(originalColor, outlinedColor, _Blend);
-                float3 normalModeColor = lerp(posterizedColor, outlinedColor, _Blend);
-                
-                */
-
-                // 7-1. 수정된 Edge 합성
-                
-                // float edgeMask = saturate(edge * _Blend * _OutlineColor.a);
-                // float3 finalBaseColor = posterizedColor;
-                // float3 outlinedColor = lerp(posterizedColor, _OutlineColor.rgb, edgeMask * 0.65);
                
                 // 7-2. 260611 Edge 합성
                 float3 outlinedColor = lerp(originalColor, _OutlineColor.rgb, edge * _OutlineColor.a);
@@ -236,16 +218,8 @@ Shader "Hidden/GANDT/SobelOutlineFullScreen"
                 // 8. Edge Only 디버그 모드에서는 윤곽선 색상만 출력
                 float3 edgeOnlyColor = edge.xxx;
 
-                // _DebugEdgeOnly = 0이면 일반 외곽선 모드
-                // _DebugEdgeOnly = 1이면 Edge Only 디버그 모드  
-
-                // 7번 방법
-                // float3 finalColor = lerp(normalModeColor, edgeOnlyColor, _DebugEdgeOnly); 
-                // 7-1번 방법
                 float3 finalColor = lerp(outlinedColor, edgeOnlyColor, _DebugEdgeOnly);
 
-
-                // half4 color = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv) * _BaseColor;
                 return half4(finalColor, 1.0);
             }
             ENDHLSL
