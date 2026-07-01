@@ -39,6 +39,8 @@ public class GANDT_EnemyComponent : MonoBehaviour
     [Tooltip("true이면 Scene View에서 위험 반경을 반투명 구로 함께 표시한다.")]
     [SerializeField] private bool drawSolidGizmo = true;
 
+    [SerializeField] private GANDT_EnemyAI enemyAI;
+
     public bool IsPlayerInside => isPlayerInside;
     public float CurrentDangerInfluence => currentDangerInfluence;
 
@@ -89,6 +91,11 @@ public class GANDT_EnemyComponent : MonoBehaviour
         {
             postProcessController = FindFirstObjectByType<GANDT_PostProcessController>();
         }
+
+        if (enemyAI == null)
+        {
+            enemyAI = GetComponent<GANDT_EnemyAI>();
+        }
     }
 
     private void OnValidate()
@@ -115,6 +122,13 @@ public class GANDT_EnemyComponent : MonoBehaviour
 
     private void UpdateDangerState()
     {
+        if (enemyAI != null && enemyAI.CurrentState == ENEMY_STATE.DISABLED)
+        {
+            isPlayerInside = false;
+            currentDangerInfluence = 0f;
+            return;
+        }
+
         float distance = Vector3.Distance(transform.position, player.position);
 
         isPlayerInside = distance <= dangerRadius;
