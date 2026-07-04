@@ -17353,7 +17353,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1528632564}
   - component: {fileID: 1528632565}
-  - component: {fileID: 1528632566}
+  - component: {fileID: 1528632568}
   - component: {fileID: 1528632567}
   m_Layer: 0
   m_Name: Enemy
@@ -17377,6 +17377,9 @@ Transform:
   m_Children:
   - {fileID: 146510410}
   - {fileID: 1425393974}
+  - {fileID: 1567598810}
+  - {fileID: 1935709283}
+  - {fileID: 1733924845}
   m_Father: {fileID: 827724408}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1528632565
@@ -17394,35 +17397,10 @@ MonoBehaviour:
   player: {fileID: 1973874037}
   playerStatus: {fileID: 855406537}
   postProcessController: {fileID: 1870380288}
-  enemyAI: {fileID: 1528632566}
-  dangerRadius: 3
-  sanityDrainPerSecond: 0.2
+  enemyAI: {fileID: 1528632568}
+  dangerRadius: 4
+  sanityDrainPerSecond: 0
   drawSolidGizmo: 0
---- !u!114 &1528632566
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1528632563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7a2e5b17777b904dbe346a3f9530180, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GANDT_EnemyAI
-  playerTransform: {fileID: 1973874037}
-  playerState: {fileID: 1101225307}
-  agent: {fileID: 1528632567}
-  detectionRange: 3
-  loseTargetRange: 6
-  cryingDetectionRange: 12
-  fieldOfViewAngle: 120
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 128
-  searchDuration: 4
-  searchStoppingDistance: 0.5
-  disabledDuration: 5
 --- !u!195 &1528632567
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -17445,6 +17423,37 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1528632568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1528632563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7a2e5b17777b904dbe346a3f9530180, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GANDT.EnemyAI
+  playerTransform: {fileID: 1973874037}
+  playerState: {fileID: 1101225307}
+  agent: {fileID: 1528632567}
+  patrolPoints:
+  - {fileID: 1567598810}
+  - {fileID: 1935709283}
+  - {fileID: 1733924845}
+  patrolWaitDuration: 1.5
+  patrolArrivalDistance: 0.3
+  detectionRange: 8
+  loseTargetRange: 12
+  cryingDetectionRange: 15
+  fieldOfViewAngle: 120
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 128
+  searchDuration: 4
+  searchArrivalDistance: 0.5
+  disabledDuration: 5
 --- !u!1001 &1535322825
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18005,6 +18014,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3042016231070954709, guid: a55c555f579cc3647bf8aaf8116217a9, type: 3}
   m_PrefabInstance: {fileID: 1566416727}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1567598809
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1567598810}
+  m_Layer: 0
+  m_Name: PatrolPoints_0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1567598810
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1567598809}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1528632564}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1575279022
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19742,6 +19782,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3042016231070954709, guid: a55c555f579cc3647bf8aaf8116217a9, type: 3}
   m_PrefabInstance: {fileID: 1733183762}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1733924844
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1733924845}
+  m_Layer: 0
+  m_Name: PatrolPoints_2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1733924845
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1733924844}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1528632564}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1743339050
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21863,6 +21934,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3453637439810788991, guid: f03767948ef560947beeaad563aa01bd, type: 3}
   m_PrefabInstance: {fileID: 1922286351}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1935709282
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1935709283}
+  m_Layer: 0
+  m_Name: PatrolPoints_1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1935709283
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1935709282}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1528632564}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1937855562
 PrefabInstance:
   m_ObjectHideFlags: 0
