@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,6 +9,11 @@ public class GANDT_EnemyAI : MonoBehaviour
     [SerializeField] private GANDT_PlayerState playerState;
     [SerializeField] private NavMeshAgent agent;
 
+    [Header("Patrol")]
+    [SerializeField] private Transform[] patrolPoints;
+    [SerializeField] private float patrolWaitDuration = 1.5f;
+    [SerializeField] private float patrolArrivalDistance = 0.3f;
+
     [Header("Detection")]
     [SerializeField] private float detectionRange = 8f;
     [SerializeField] private float loseTargetRange = 12f;
@@ -17,48 +23,34 @@ public class GANDT_EnemyAI : MonoBehaviour
 
     [Header("Search")]
     [SerializeField] private float searchDuration = 4f;
-    [SerializeField] private float searchStoppingDistance = 0.5f;
+    [SerializeField] private float searchArrivalDistance = 0.5f;
 
     [Header("Disable")]
     [SerializeField] private float disabledDuration = 5f;
 
     public ENEMY_STATE CurrentState { get; private set; }
 
+    public string CurrentStateName => CurrentState.ToString();
+
+    public event Action<ENEMY_STATE> OnStateChanged;
+
     private Vector3 lastKnownPlayerPosition;
+
+    private int currentPatrolIndex;
     private float stateTimer;
+    private bool isWaitingAtPatrolPoint;
+    private bool hasSearchDestination;
+
 
     private void Reset()
     {
         agent = GetComponent<NavMeshAgent>();
-
-        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
-        
-        if (playerObject != null)
-        {
-            playerTransform = playerObject.transform;
-            playerState = playerObject.GetComponent<GANDT_PlayerState>();
-        }
+        FindPlayerReferences();
     }
 
-    void Awake()
+    private void Awake()
     {
-        if (agent == null)
-        {
-            agent = GetComponent<NavMeshAgent>();
-        }
-        if (playerTransform == null)
-        {
-            GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
-            if (playerObject != null)
-            {
-                playerTransform = playerObject.transform;
-            }
-        }
-
-        if (playerState == null && playerTransform != null)
-        {
-            playerState = playerTransform.GetComponent<GANDT_PlayerState>();
-        }
+        FindMissingReferences();
     }
 
     private void OnEnable()
@@ -79,8 +71,7 @@ public class GANDT_EnemyAI : MonoBehaviour
 
     private void Start()
     {
-        CurrentState = ENEMY_STATE.PATROL;
-        agent.isStopped = true; // 초기에는 정지 상태로 시작
+        ChangeState(ENEMY_STATE.PATROL);
     }
 
 
@@ -268,6 +259,38 @@ public class GANDT_EnemyAI : MonoBehaviour
         if (distance <= cryingDetectionRange)
         {
             ChangeState(ENEMY_STATE.DISABLED);
+        }
+    }
+
+    private void FindPlayerReferences()
+    {
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+
+        if (playerObject != null)
+        {
+            playerTransform = playerObject.transform;
+            playerState = playerObject.GetComponent<GANDT_PlayerState>();
+        }
+    }
+
+    private void FindMissingReferences()
+    {
+        if (agent == null)
+        {
+            agent = GetComponent<NavMeshAgent>();
+        }
+        if (playerTransform == null)
+        {
+            GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+            if (playerObject != null)
+            {
+                playerTransform = playerObject.transform;
+            }
+        }
+
+        if (playerState == null && playerTransform != null)
+        {
+            playerState = playerTransform.GetComponent<GANDT_PlayerState>();
         }
     }
 }
