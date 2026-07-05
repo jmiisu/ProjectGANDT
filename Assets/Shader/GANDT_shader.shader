@@ -23,7 +23,7 @@
 //   현재 기본 파이프라인에서는 사용하지 않는다.
 // =====================================================
 
-Shader "Hidden/GANDT/ForAssignment"
+Shader "Hidden/GANDT/FinalShader"
 {
     Properties
     {
@@ -119,7 +119,7 @@ Shader "Hidden/GANDT/ForAssignment"
 
         Pass
         {
-            Name "ForAssignment"
+            Name "FinalShader"
 
             HLSLPROGRAM
 

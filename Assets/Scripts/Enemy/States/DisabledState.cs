@@ -16,6 +16,7 @@ namespace GANDT
         {
             disabledTimer = Enemy.DisabledDuration;
             Enemy.ResetMovementPath();
+            Enemy.SetVisualActive(false);
         }
 
         public override void Update()
@@ -30,6 +31,7 @@ namespace GANDT
         public override void Exit()
         {
             disabledTimer = 0f;
+            Enemy.SetVisualActive(true);
         }
     }
 }

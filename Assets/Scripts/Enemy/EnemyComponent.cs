@@ -25,8 +25,7 @@ namespace GANDT
         private void Reset()
         {
             enemyAI = GetComponent<EnemyAI>();
-            postProcessController =
-                FindFirstObjectByType<GANDT_PostProcessController>();
+            postProcessController = FindFirstObjectByType<GANDT_PostProcessController>();
 
             FindPlayer();
         }

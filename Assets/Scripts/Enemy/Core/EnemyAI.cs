@@ -45,6 +45,7 @@ namespace GANDT
         [Header("Disabled")]
         [Min(0f)]
         [SerializeField] private float disabledDuration = 5f;
+        [SerializeField] private Renderer[] enemyRenderers;
 
         private EnemyFSM stateMachine;
 
@@ -103,6 +104,11 @@ namespace GANDT
         {
             FindReferences();
             CreateStates();
+
+            if (enemyRenderers == null || enemyRenderers.Length == 0)
+            {
+                enemyRenderers = GetComponentsInChildren<Renderer>(true);
+            }
         }
 
         private void OnEnable()
@@ -207,6 +213,16 @@ namespace GANDT
                    playerState != null;
         }
 
+        public void SetVisualActive(bool isActive)
+        {
+            foreach (Renderer targetRenderer in enemyRenderers)
+            {
+                if (targetRenderer != null)
+                {
+                    targetRenderer.enabled = isActive;
+                }
+            }
+        }
         // --------------------------------------------------
         // Patrol
         // --------------------------------------------------

@@ -24,31 +24,19 @@ public class GANDT_PostProcessController : MonoBehaviour
     [SerializeField] private float memoryDetectRange = 8f;
 
     [SerializeField]
-    private AnimationCurve memoryInfluenceCurve =
-        AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+    private AnimationCurve memoryInfluenceCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
 
     public float MemoryInfluence { get; private set; }
     public float EnemyDangerInfluence { get; private set; }
 
     public DEBUG_VIEW_MODE DebugViewMode => debugViewMode;
 
-    private static readonly int MemoryScreenPosID =
-        Shader.PropertyToID("_MemoryScreenPos");
-
-    private static readonly int MemoryInfluenceID =
-        Shader.PropertyToID("_MemoryInfluence");
-
-    private static readonly int SanityID =
-        Shader.PropertyToID("_Sanity");
-
-    private static readonly int UseMemoryFlowID =
-        Shader.PropertyToID("_UseMemoryFlow");
-
-    private static readonly int DebugViewModeID =
-        Shader.PropertyToID("_DebugViewMode");
-
-    private static readonly int EnemyDangerInfluenceID =
-        Shader.PropertyToID("_EnemyDangerInfluence");
+    private static readonly int MemoryScreenPosID = Shader.PropertyToID("_MemoryScreenPos");
+    private static readonly int MemoryInfluenceID = Shader.PropertyToID("_MemoryInfluence");
+    private static readonly int SanityID = Shader.PropertyToID("_Sanity");
+    private static readonly int UseMemoryFlowID = Shader.PropertyToID("_UseMemoryFlow");
+    private static readonly int DebugViewModeID = Shader.PropertyToID("_DebugViewMode");
+    private static readonly int EnemyDangerInfluenceID = Shader.PropertyToID("_EnemyDangerInfluence");
 
     private void Reset()
     {
@@ -136,8 +124,7 @@ public class GANDT_PostProcessController : MonoBehaviour
             return;
         }
 
-        Vector3 viewportPosition =
-            targetCamera.WorldToViewportPoint(memoryTarget.position);
+        Vector3 viewportPosition = targetCamera.WorldToViewportPoint(memoryTarget.position);
 
         bool isInFrontOfCamera = viewportPosition.z > 0f;
 
@@ -147,32 +134,20 @@ public class GANDT_PostProcessController : MonoBehaviour
             viewportPosition.y >= 0f &&
             viewportPosition.y <= 1f;
 
-        float distance =
-            Vector3.Distance(player.position, memoryTarget.position);
+        float distance = Vector3.Distance(player.position, memoryTarget.position);
 
         float influence = 0f;
 
-        if (
-            isInFrontOfCamera &&
-            isOnScreen &&
-            distance <= memoryDetectRange
-        )
+        if (isInFrontOfCamera && isOnScreen && distance <= memoryDetectRange)
         {
-            float normalizedDistance =
-                Mathf.Clamp01(distance / memoryDetectRange);
+            float normalizedDistance = Mathf.Clamp01(distance / memoryDetectRange);
 
-            influence =
-                Mathf.Clamp01(
-                    memoryInfluenceCurve.Evaluate(normalizedDistance)
-                );
+            influence = Mathf.Clamp01(memoryInfluenceCurve.Evaluate(normalizedDistance));
         }
 
         MemoryInfluence = influence;
 
-        postProcessMaterial.SetFloat(
-            UseMemoryFlowID,
-            influence > 0.001f ? 1f : 0f
-        );
+        postProcessMaterial.SetFloat(UseMemoryFlowID, influence > 0.001f ? 1f : 0f);
 
         postProcessMaterial.SetVector(
             MemoryScreenPosID,
@@ -201,20 +176,14 @@ public class GANDT_PostProcessController : MonoBehaviour
 
     private void UpdatePlayerStatus()
     {
-        float sanity =
-            playerStatus != null
-                ? playerStatus.Sanity
-                : 1f;
+        float sanity = playerStatus != null ? playerStatus.Sanity: 1f;
 
         postProcessMaterial.SetFloat(SanityID, sanity);
     }
 
     private void UpdateEnemyDanger()
     {
-        postProcessMaterial.SetFloat(
-            EnemyDangerInfluenceID,
-            EnemyDangerInfluence
-        );
+        postProcessMaterial.SetFloat(EnemyDangerInfluenceID, EnemyDangerInfluence);
     }
 
     public void SetDebugViewMode(DEBUG_VIEW_MODE mode)
