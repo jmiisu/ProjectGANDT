@@ -17,6 +17,13 @@ public class GANDT_PostProcessController : MonoBehaviour
     [SerializeField] private GANDT_PlayerStatus playerStatus;
     [SerializeField] private Transform memoryTarget;
 
+    [SerializeField] private GANDT_PlayerState playerState;
+    [SerializeField] private float eyeMaskHeightOffset = 1.0f;
+    [SerializeField] private float eyeCloseSpeed = 5f;
+    
+    private float currentEyeCloseAmount;
+
+
     [Header("Debug View")]
     [SerializeField] private DEBUG_VIEW_MODE debugViewMode = DEBUG_VIEW_MODE.FINAL;
 
@@ -37,6 +44,10 @@ public class GANDT_PostProcessController : MonoBehaviour
     private static readonly int UseMemoryFlowID = Shader.PropertyToID("_UseMemoryFlow");
     private static readonly int DebugViewModeID = Shader.PropertyToID("_DebugViewMode");
     private static readonly int EnemyDangerInfluenceID = Shader.PropertyToID("_EnemyDangerInfluence");
+
+    private static readonly int EyeCloseAmountID = Shader.PropertyToID("_EyeCloseAmount");
+    private static readonly int PlayerScreenPosID = Shader.PropertyToID("_PlayerScreenPos");
+
 
     private void Reset()
     {
@@ -74,6 +85,7 @@ public class GANDT_PostProcessController : MonoBehaviour
         UpdateMemoryFlow();
         UpdatePlayerStatus();
         UpdateEnemyDanger();
+        UpdateEyeClosingEffect();
     }
 
     private void FindMissingReferences()
@@ -176,7 +188,7 @@ public class GANDT_PostProcessController : MonoBehaviour
 
     private void UpdatePlayerStatus()
     {
-        float sanity = playerStatus != null ? playerStatus.Sanity: 1f;
+        float sanity = playerStatus != null ? playerStatus.Sanity : 1f;
 
         postProcessMaterial.SetFloat(SanityID, sanity);
     }
@@ -184,6 +196,37 @@ public class GANDT_PostProcessController : MonoBehaviour
     private void UpdateEnemyDanger()
     {
         postProcessMaterial.SetFloat(EnemyDangerInfluenceID, EnemyDangerInfluence);
+    }
+
+    private void UpdateEyeClosingEffect()
+    {
+        if (postProcessMaterial == null)
+        {
+            return;
+        }
+
+        float targetEyeCloseAmount = playerState.IsEyesClosed ? 1f : 0f;
+
+        currentEyeCloseAmount = Mathf.MoveTowards(
+            currentEyeCloseAmount,
+            targetEyeCloseAmount,
+            eyeCloseSpeed * Time.deltaTime
+        );
+
+        postProcessMaterial.SetFloat(EyeCloseAmountID, currentEyeCloseAmount);
+
+        if (targetCamera == null || player == null)
+        {
+            return;
+        }
+
+        Vector3 worldPos = player.position + Vector3.up * eyeMaskHeightOffset;
+
+        Vector3 viewportPos = targetCamera.WorldToViewportPoint(worldPos);
+
+        postProcessMaterial.SetVector(PlayerScreenPosID,
+            new Vector4(viewportPos.x, viewportPos.y, 0f, 0f));
+
     }
 
     public void SetDebugViewMode(DEBUG_VIEW_MODE mode)

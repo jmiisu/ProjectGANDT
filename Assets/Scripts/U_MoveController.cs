@@ -127,6 +127,24 @@ namespace GANDT
 
         private void Move()
         {
+            bool isCrying = _playerState != null && _playerState.IsCrying;
+
+            if (isCrying)
+            {
+                _speed = 0f;
+                _animationBlend = 0f;
+
+                _controller.Move(Vector3.up * _verticalVelocity * Time.deltaTime);
+                
+                if (_hasAnimator)
+                {
+                    _animator.SetFloat(_animIDSpeed, _animIDSpeed);
+                    _animator.SetFloat(_animIDMotionSpeed, 0f);
+                }
+
+                return;
+            }
+
             // 달리기 가능 여부 변수 추가
             bool canSprint = _playerState == null || !_playerState.IsEyesClosed;
 

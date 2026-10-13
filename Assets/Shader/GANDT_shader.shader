@@ -102,6 +102,24 @@ Shader "Hidden/GANDT/FinalShader"
         _DangerEdgeColor ("Danger Edge Color", Color) = (1, 0, 0, 1)
         _DangerEdgeBoost ("Danger Edge Boost", Range(0, 5)) = 1.5
         _DangerJitterBoost ("Danger Jitter Boost", Range(0, 3)) = 1.0
+
+        [Header(Eye Closing)]
+        [Space(5)]
+        // 0 = 눈 뜸, 1 = 완전히 눈 감은 상태
+        _EyeCloseAmount ("Eye Close Amount", Range(0, 1)) = 0
+
+        // 화면상 플레이어 위치
+        _PlayerScreenPos ("Player Screen Position", Vector) = (0.5, 0.5, 0, 0)
+
+        // 이 범위 안쪽은 최대한 밝게 유지
+        _EyeVisibleInnerRadius ("Eye Visible Inner Radius", Range(0.01, 1.0)) = 0.15
+
+        // 이 범위까지 점진적으로 어두워짐
+        _EyeVisibleOuterRadius ("Eye Visible Outer Radius", Range(0.01, 1.5)) = 0.35
+
+        // 외부 영역의 최종 밝기
+        // 0이면 완전 검정, 0.1이면 약 10% 밝기
+        _EyeOutsideBrightness ("Eye Outside Brightness", Range(0, 1)) = 0.08
     }
 
     SubShader
@@ -169,6 +187,12 @@ Shader "Hidden/GANDT/FinalShader"
             float4 _DangerEdgeColor;
             float _DangerEdgeBoost;
             float _DangerJitterBoost;
+
+            float _EyeCloseAmount;
+            float4 _PlayerScreenPos;
+            float _EyeVisibleInnerRadius;
+            float _EyeVisibleOuterRadius;
+            float _EyeOutsideBrightness;
 
             // =====================================================
             // 1. Utility
@@ -516,6 +540,40 @@ Shader "Hidden/GANDT/FinalShader"
                 return BuildFlowDebugColor(originalUV);
             }
 
+            float3 ApplyEyeClosing(float3 color, float2 uv)
+            {
+                float eyeClose = saturate(_EyeCloseAmount);
+
+                // 눈을 뜨고 있으면 아무 처리도 하지 않음
+                if (eyeClose <= 0.001)
+                {
+                    return color;
+                }
+
+                float2 playerPos = _PlayerScreenPos.xy;
+
+                // 화면 비율 보정
+                // 원형 마스크가 해상도에 따라 타원형이 되는 것을 방지
+                float aspect = _ScreenParams.x / _ScreenParams.y;
+                
+                float2 delta = uv - playerPos;
+                delta.x *= aspect;
+
+                float dist = length(delta);
+
+                // 플레이어 주변에서는 0,
+                // 바깥으로 갈수록 1에 가까워지는 마스크
+                float outsideMask = smoothstep(_EyeVisibleInnerRadius, _EyeVisibleOuterRadius, dist);
+
+                // 바깥쪽 밝기
+                float brightness = lerp(1.0, _EyeOutsideBrightness, outsideMask);
+
+                // 눈을 감는 정도에 따라 효과 적용하기
+                brightness = lerp(1.0, brightness, eyeClose);
+
+                return color * brightness;
+            }
+
             // =====================================================
             // 7. Fragment
             // =====================================================
@@ -542,6 +600,9 @@ Shader "Hidden/GANDT/FinalShader"
 
                 // Final Composition
                 float3 finalColor = ComposeFinalColor(baseColor, edge);
+
+                // Eye Closing
+                finalColor = ApplyEyeClosing(finalColor, uv);
 
                 // Debug View
                 finalColor = ApplyDebugView(finalColor, edge, baseColor, uv);

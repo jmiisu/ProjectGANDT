@@ -414,10 +414,7 @@ namespace GANDT
 
         private void HandleCryingCompleted()
         {
-            if (
-                CurrentStateType == ENEMY_STATE.DISABLED ||
-                playerTransform == null
-            )
+            if (CurrentStateType == ENEMY_STATE.DISABLED || playerTransform == null)
             {
                 return;
             }

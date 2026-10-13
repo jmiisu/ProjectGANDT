@@ -22034,6 +22034,9 @@ MonoBehaviour:
   player: {fileID: 3893294199698029855}
   playerStatus: {fileID: 855406537}
   memoryTarget: {fileID: 1072365796}
+  playerState: {fileID: 1101225307}
+  eyeMaskHeightOffset: 1
+  eyeCloseSpeed: 5
   debugViewMode: 0
   memoryDetectRange: 8
   memoryInfluenceCurve:
