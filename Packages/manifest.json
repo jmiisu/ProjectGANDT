@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "ayellowpaper.serialized-dictionary": "https://github.com/ayellowpaper/SerializedDictionary.git",
+    "com.github.siccity.xnode": "https://github.com/Siccity/xNode.git",
     "com.unity.2d.animation": "13.0.5",
     "com.unity.ai.navigation": "2.0.10",
     "com.unity.cinemachine": "3.1.6",

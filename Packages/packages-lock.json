@@ -1,5 +1,19 @@
 {
   "dependencies": {
+    "ayellowpaper.serialized-dictionary": {
+      "version": "https://github.com/ayellowpaper/SerializedDictionary.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "a709090ac35b99ab3a0a2ce380664387fd60bc22"
+    },
+    "com.github.siccity.xnode": {
+      "version": "https://github.com/Siccity/xNode.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "d6effd70f5574369e3415c423ef3e621ea309564"
+    },
     "com.unity.2d.animation": {
       "version": "13.0.5",
       "depth": 0,

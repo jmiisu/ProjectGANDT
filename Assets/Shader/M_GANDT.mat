@@ -25,7 +25,8 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _USEMEMORYFLOW_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -125,8 +126,8 @@ Material:
     - _EnvironmentReflections: 1
     - _EyeCloseAmount: 0
     - _EyeOutsideBrightness: 0.01
-    - _EyeVisibleInnerRadius: 0.15
-    - _EyeVisibleOuterRadius: 0.25
+    - _EyeVisibleInnerRadius: 0.05
+    - _EyeVisibleOuterRadius: 0.1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -162,9 +163,9 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DangerEdgeColor: {r: 1, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _MemoryScreenPos: {r: 0.6893654, g: 0.81787544, b: 0, a: 0}
+    - _MemoryScreenPos: {r: 0.6685114, g: -3.5596104, b: 0, a: 0}
     - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
-    - _PlayerScreenPos: {r: 0.5, g: 0.37298304, b: 0, a: 0}
+    - _PlayerScreenPos: {r: 0.5, g: 0.4175961, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
