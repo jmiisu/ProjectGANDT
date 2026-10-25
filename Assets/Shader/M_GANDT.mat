@@ -25,8 +25,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _USEMEMORYFLOW_ON
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -133,7 +132,7 @@ Material:
     - _GlossyReflections: 0
     - _GrayContrast: 3
     - _MemoryFlowRadius: 0.26
-    - _MemoryInfluence: 0
+    - _MemoryInfluence: 0.27018118
     - _MemoryPullStrength: 0.0198
     - _Metallic: 0
     - _NormalSensitivity: 0.01
@@ -154,7 +153,7 @@ Material:
     - _UseBWQuantize: 0
     - _UseDithering: 1
     - _UseGrayScale: 0
-    - _UseMemoryFlow: 0
+    - _UseMemoryFlow: 1
     - _WorkflowMode: 1
     - _XRMotionVectorsPass: 1
     - _ZWrite: 1
@@ -163,9 +162,9 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DangerEdgeColor: {r: 1, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _MemoryScreenPos: {r: 0.6685114, g: -3.5596104, b: 0, a: 0}
+    - _MemoryScreenPos: {r: 0.9949619, g: 0.08809081, b: 0, a: 0}
     - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
-    - _PlayerScreenPos: {r: 0.5, g: 0.4175961, b: 0, a: 0}
+    - _PlayerScreenPos: {r: 0.5, g: 0.4175967, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
