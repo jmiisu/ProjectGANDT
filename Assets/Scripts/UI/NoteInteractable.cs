@@ -1,19 +1,32 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace GANDT
 {
-    public class NoteInteractable : MonoBehaviour
+    public class NoteInteractable : MonoBehaviour, IInteractable
     {
         [Header("Note")]
         [SerializeField] private NoteData noteData;
+        [SerializeField] private TextViewer textViewer;
+        [SerializeField] private string interactionText = "Read Note";
 
         //[Header("Interaction Area")]
         //[SerializeField] 
-        SphereCollider interactionCollider;
+        private SphereCollider interactionCollider;
 
         private readonly HashSet<Collider> playerColliders = new HashSet<Collider>();
+
+        public string InteractionText => interactionText;
+
+        public bool CanInteract =>
+            isActiveAndEnabled &&
+            noteData != null &&
+            noteData.pages != null &&
+            noteData.pages.Length > 0 &&
+            playerColliders.Count > 0 &&
+            textViewer != null &&
+            !textViewer.IsOpen;
+
 
         public bool IsAvailable =>
             isActiveAndEnabled &&
@@ -57,6 +70,17 @@ namespace GANDT
             playerColliders.Remove(other);
         }
 
+        // IInteractable 인터페이스 구현
+        public void Interact()
+        {
+            if (!CanInteract)
+            {
+                return;
+            }
+
+            TryOpenNote(textViewer);
+        }
+
         public bool Interact(TextViewer viewer)
         {
             if (!IsAvailable || viewer == null)
@@ -64,6 +88,11 @@ namespace GANDT
                 return false;
             }
 
+            return TryOpenNote(viewer);
+        }
+        
+        private bool TryOpenNote(TextViewer viewer)
+        {
             bool success = viewer.TryOpen(noteData);
 
             if (success)
@@ -73,7 +102,6 @@ namespace GANDT
 
             return success;
         }
-
         private static bool IsPlayer(Collider other)
         {
             return other.CompareTag("Player");

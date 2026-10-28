@@ -6839,10 +6839,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4461061736827194588, guid: 0d604139e744bb3419b743662f4a6646, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d604139e744bb3419b743662f4a6646, type: 3}
 --- !u!1001 &391946029
 PrefabInstance:
@@ -10861,7 +10858,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1391c870129e1d542adb9d15eb7d1f2e, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -10928,7 +10925,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &555408188
@@ -20777,7 +20774,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1101225306}
-  - component: {fileID: 1101225310}
   - component: {fileID: 1101225307}
   - component: {fileID: 1101225309}
   - component: {fileID: 1101225308}
@@ -20803,6 +20799,7 @@ Transform:
   m_Children:
   - {fileID: 855406538}
   - {fileID: 3893294199698029855}
+  - {fileID: 1462830427}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &1101225307
@@ -20853,24 +20850,6 @@ MonoBehaviour:
   safeDuration: 2
   mentalnessDrainPerSecond: 0.08
   playerStatus: {fileID: 855406537}
---- !u!114 &1101225310
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1101225305}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27506bd92c306ab44b9d2b437283ce10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GANDT.PlayerInteractor
-  player: {fileID: 1101225306}
-  textViewer: {fileID: 1012862313}
-  interactionPrompt: {fileID: 1127713796}
-  noteInteractables:
-  - {fileID: 645101483}
-  - {fileID: 2031607873}
 --- !u!1001 &1103150658
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21453,8 +21432,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 240, y: 120}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 360, y: 120}
+  m_SizeDelta: {x: 480, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1127713798
 MonoBehaviour:
@@ -21476,10 +21455,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '[E]xamine'
+  m_text: "[E] \uB178\uD2B8 \uC77D\uAE30"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1391c870129e1d542adb9d15eb7d1f2e, type: 2}
+  m_sharedMaterial: {fileID: 5653377614262955975, guid: 1391c870129e1d542adb9d15eb7d1f2e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -21503,8 +21482,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 48
+  m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -26191,6 +26170,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7405235075765228569, guid: 9be99ee0c2686ef44bf420ce960b6598, type: 3}
   m_PrefabInstance: {fileID: 1826161065}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1421978470 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4822645400678791619, guid: 0d604139e744bb3419b743662f4a6646, type: 3}
+  m_PrefabInstance: {fileID: 1236505970568452411}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21cfae2dc2972d9419f200f1f583cbdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GANDT.GANDT_DoorTrigger
 --- !u!1 &1425393973
 GameObject:
   m_ObjectHideFlags: 0
@@ -26839,6 +26829,62 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1459769848}
   m_CullTransparentMesh: 1
+--- !u!1 &1462830426
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1462830427}
+  - component: {fileID: 1462830428}
+  m_Layer: 0
+  m_Name: PlayerInteractor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1462830427
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1462830426}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1101225306}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1462830428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1462830426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27506bd92c306ab44b9d2b437283ce10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GANDT.PlayerInteractor
+  player: {fileID: 1101225306}
+  textViewer: {fileID: 1012862313}
+  roomManager: {fileID: 669060280}
+  interactionPrompt: {fileID: 1127713796}
+  interactionPromptText: {fileID: 1127713798}
+  interactableObjects:
+  - {fileID: 645101483}
+  - {fileID: 2031607873}
+  - {fileID: 1421978470}
+  - {fileID: 2118372538}
+  interactionKey: 19
+  switchKey: 20
 --- !u!1001 &1463510649
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37392,6 +37438,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GANDT.NoteInteractable
   noteData: {fileID: 11400000, guid: 83d1d359b94730348b309dc9858c3f53, type: 2}
+  textViewer: {fileID: 1012862313}
+  interactionText: "\uCE60\uD310 \uC77D\uAE30"
 --- !u!1001 &2036177748
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38507,6 +38555,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3286016018438093473, guid: 0d604139e744bb3419b743662f4a6646, type: 3}
   m_PrefabInstance: {fileID: 390762515}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2118372538 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4822645400678791619, guid: 0d604139e744bb3419b743662f4a6646, type: 3}
+  m_PrefabInstance: {fileID: 390762515}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21cfae2dc2972d9419f200f1f583cbdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GANDT.GANDT_DoorTrigger
 --- !u!1001 &2119940376
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39475,10 +39534,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4461061736827194588, guid: 0d604139e744bb3419b743662f4a6646, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d604139e744bb3419b743662f4a6646, type: 3}
 --- !u!4 &1280561502791248452
 Transform:
@@ -40480,7 +40536,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1374587907238494890, guid: 96dd1e6e0c8a08142b64c664158d5b74, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3
+      value: -7.25
       objectReference: {fileID: 0}
     - target: {fileID: 1374587907238494890, guid: 96dd1e6e0c8a08142b64c664158d5b74, type: 3}
       propertyPath: m_LocalPosition.y
@@ -40526,6 +40582,10 @@ PrefabInstance:
       propertyPath: textViewer
       value: 
       objectReference: {fileID: 1012862313}
+    - target: {fileID: 7047578745286579760, guid: 96dd1e6e0c8a08142b64c664158d5b74, type: 3}
+      propertyPath: interactionText
+      value: "\uB178\uD2B8 \uC77D\uAE30"
+      objectReference: {fileID: 0}
     - target: {fileID: 7047578745286579760, guid: 96dd1e6e0c8a08142b64c664158d5b74, type: 3}
       propertyPath: interactionPrompt
       value: 

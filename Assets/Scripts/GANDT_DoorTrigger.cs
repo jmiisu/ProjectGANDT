@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace GANDT
 {
-    public class GANDT_DoorTrigger : MonoBehaviour
+    public class GANDT_DoorTrigger : MonoBehaviour, IInteractable
     {
         [Header("Manager")]
         [SerializeField] private GANDT_RoomManager roomManager;
@@ -14,8 +14,8 @@ namespace GANDT
         [SerializeField] private Transform destinationSpawn;
 
         [Header("Interaction")]
-        [SerializeField] private Key interactionKey = Key.E;
-        [SerializeField] private GameObject interactionUI;
+        //[SerializeField] private Key interactionKey = Key.E;
+        [SerializeField] private string interactionText;
 
         [Header("Door Audio")]
         [SerializeField] private AudioClip doorOpenClip;
@@ -30,42 +30,36 @@ namespace GANDT
         public GameObject DestinationRoom => destinationRoom;
         public Transform DestinationSpawn => destinationSpawn;
 
-        private void Awake()
-        {
-            SetInteractionUI(false);
-        }
+        // IInteractable 구현
+        public string InteractionText => interactionText;
+
+        public bool CanInteract =>
+            isActiveAndEnabled &&
+            isPlayerInside &&
+            player != null &&
+            roomManager != null &&
+            roomManager.isActiveAndEnabled &&
+            !roomManager.IsTransitioning &&
+            destinationRoom != null &&
+            destinationSpawn != null &&
+            destinationRoom != roomManager.CurrentRoom;
 
         private void OnDisable()
         {
             player = null;
             isPlayerInside = false;
-            SetInteractionUI(false);
-        }
-
-        private void Update()
-        {
-            if (!isPlayerInside)
-            {
-                return;
-            }
-
-            if (Keyboard.current == null)
-            {
-                return;
-            }
-
-            if (Keyboard.current[interactionKey].wasPressedThisFrame)
-            {
-                Interact();
-            }
         }
 
         public void OnPlayerEnter(Transform playerTransform)
         {
+            if (playerTransform == null)
+            {
+                return;
+            }
+
             player = playerTransform;
             isPlayerInside = true;
 
-            SetInteractionUI(true);
             Debug.Log("[DoorTrigger] 상호작용 가능");
         }
 
@@ -79,21 +73,13 @@ namespace GANDT
             player = null;
             isPlayerInside = false;
 
-            SetInteractionUI(false);
             Debug.Log($"[DoorTrigger] 상호작용 영역 이탈");
         }
 
-        private void Interact()
+        public void Interact()
         {
-            if (roomManager == null)
+            if (!CanInteract)
             {
-                Debug.LogWarning("[DoorTrigger] RoomManager가 지정되지 않았습니다.", this);
-                return;
-            }
-
-            if (destinationRoom == null || destinationSpawn == null)
-            {
-                Debug.LogWarning("[DoorTrigger] Destination Room 또는 Spawn이 지정되지 않았습니다.", this);
                 return;
             }
 
@@ -102,16 +88,7 @@ namespace GANDT
             if (success)
             {
                 Debug.Log($"[DoorTrigger] {destinationRoom.name}으로 이동 완료");
-
-                // TODO:
-                // GANDT_RoomManager 구현 후
-                // 실제 방 전환 기능과 연결
             }
-        }
-
-        private void SetInteractionUI(bool onoff)
-        {
-            interactionUI.SetActive(onoff);
         }
     }
 }
