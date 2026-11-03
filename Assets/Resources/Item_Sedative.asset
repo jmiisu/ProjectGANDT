@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c780d1b9ea477214eb720bebe4d61a09, type: 3}
+  m_Name: Item_Sedative
+  m_EditorClassIdentifier: Assembly-CSharp::GANDT.ItemData
+  itemId: sedative
+  itemName: "\uC9C4\uC815\uC81C"
+  description: "\uBA39\uC73C\uBA74 \uC774\uC131\uC774 \uC720\uC9C0\uB41C\uB2E4.\n\uC65C\uC778\uC9C0
+    \uC775\uC219\uD55C \uB290\uB08C\uC774 \uAC10\uB3C8\uB2E4..."
+  icon: {fileID: 21300000, guid: d92b23ffdbf716fd96af86f915f4db04, type: 3}
+  itemType: 2
+  maxStack: 10
+  effectAmount: 0.5

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GANDT.NoteData
   title: Basic Control
   pages:
-  - 'Move: W A S D or Arrow Key'
-  - 'Interaction: E'
+  - "\uC774\uB3D9: W A S D \uB610\uB294 \uD654\uC0B4\uD45C \uD0A4"
+  - "\uC0C1\uD638\uC791\uC6A9: E\n\uC561\uC158 \uC804\uD658: F"
   displayType: 1
   documentBackground: {fileID: 0}

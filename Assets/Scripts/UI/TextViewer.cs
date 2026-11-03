@@ -11,6 +11,7 @@ namespace GANDT
         [SerializeField] private GameObject dialoguePanel;
         [SerializeField] private TMP_Text bodyText;
         [SerializeField] private TMP_Text pageIndicator;
+        [SerializeField] private TMP_Text nextIndicator;
 
         [Header("Movement Lock (optional")]
         [SerializeField] private MonoBehaviour[] movementScripts;
@@ -38,6 +39,7 @@ namespace GANDT
         {
             if (IsOpen)
             {
+                nextIndicator.text = "[E] 다음";
                 Close();
             }
         }
@@ -126,6 +128,15 @@ namespace GANDT
             if (pageIndicator != null)
             {
                 pageIndicator.text = $"{pageIndex + 1} / {currentNote.pages.Length}";
+            }
+
+            if (pageIndex == currentNote.pages.Length - 1)
+            {
+                nextIndicator.text = "[E] 마치기";
+            }
+            else
+            {
+                nextIndicator.text = "[E] 다음";
             }
         }
 
